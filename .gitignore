@@ -30,3 +30,6 @@ Thumbs.db
 
 # Output files (include selectively)
 outputs/*.txt
+
+# Python Env
+pdf_env/
