@@ -44,6 +44,24 @@ class PDF(FPDF):
         self.multi_cell(0, 4, code, 0, 'L', True)
         self.ln()
 
+    def add_screenshot(self, title, image_path):
+        self.chapter_title(0, title)  # Use 0 or appropriate numbering logic if needed, or just title
+        if os.path.exists(image_path):
+            try:
+                # Adjust width to fit page (A4 width is 210mm, margins are usuall 10mm each side)
+                self.image(image_path, x=10, w=190)
+                self.ln(5)
+            except Exception as e:
+                self.set_text_color(255, 0, 0)
+                self.cell(0, 10, f"Error loading image: {e}", 0, 1)
+                self.set_text_color(0, 0, 0)
+        else:
+            self.set_text_color(100, 100, 100)
+            self.set_font('Arial', 'I', 10)
+            self.cell(0, 10, f"[Placeholder: Save screenshot as '{os.path.basename(image_path)}' in outputs/ directory]", 0, 1)
+            self.set_text_color(0, 0, 0)
+        self.ln()
+
 pdf = PDF()
 pdf.alias_nb_pages()
 pdf.add_page()
@@ -58,7 +76,8 @@ pdf.ln(10)
 # Section: Apache Hadoop & MapReduce
 
 pdf.chapter_title(1, 'WordCount Execution')
-pdf.chapter_body('The WordCount example was executed successfully. (Please insert screenshot of execution here manually if needed, or refer to the "outputs" folder in the repo).')
+pdf.chapter_body('The WordCount example was executed successfully.')
+pdf.add_screenshot("Output Screenshot", "outputs/q1_wordcount.png")
 
 pdf.chapter_title(2, 'Map Phase Input/Output')
 pdf.chapter_body('For the input lyrics "We\'re up all night...", the Map phase processes lines as values with byte offsets as keys.')
@@ -86,6 +105,7 @@ pdf.chapter_body('Implemented to iterate through IntWritable values and sum them
 
 pdf.chapter_title(7, 'Execution on 200.txt')
 pdf.chapter_body('Executed on the cluster. The output file contains word counts for the dataset.')
+pdf.add_screenshot("Q7 Output Screenshot", "outputs/q7_200txt_output.png")
 
 pdf.chapter_title(8, 'HDFS Replication')
 pdf.chapter_body('Q: Why don\'t we have a replication factor for directories?')
@@ -100,18 +120,21 @@ pdf.chapter_body('Added timing code using System.currentTimeMillis().\nExperimen
 
 pdf.chapter_title(10, 'Book Metadata Extraction')
 pdf.chapter_body('Implemented in spark/q10_metadata.py using Python Regex.')
+pdf.add_screenshot("Q10 Output Screenshot", "outputs/q10_metadata.png")
 pdf.chapter_body('Regex used:\n- Title: "Title:\\s*(.+)"\n- Release Date: "Release [Dd]ate:\\s*(.+?)(?:\\s*\\[|$)"\n- Language: "Language:\\s*(.+)"\n- Encoding: "Character set encoding:\\s*(.+)"')
 pdf.chapter_body('Challenges:\n- Inconsistent headers (e.g., "Posting Date" vs "Release Date").\n- Multi-line values.\n- Missing fields.')
 pdf.chapter_body('Handling in Real-world:\n- Use robust parsers/libraries.\n- Data validation pipelines.\n- Fallback patterns.')
 
 pdf.chapter_title(11, 'TF-IDF & Book Similarity')
 pdf.chapter_body('Implemented using PySpark native functions (q11_tfidf.py).')
+pdf.add_screenshot("Q11 Output Screenshot", "outputs/q11_tfidf.png")
 pdf.chapter_body('Concepts:\n- TF (Term Frequency): How often a word appears in a doc.\n- IDF (Inverse Doc Frequency): log(N/df), weights down common words.\n- TF-IDF: Highlights words important to a specific doc but rare globally.')
 pdf.chapter_body('Cosine Similarity:\n- Measures angle between vectors.\n- Range [0, 1].\n- Good for text because it ignores document length (magnitude).')
 pdf.chapter_body('Scalability:\n- Pairwise comparison is O(N^2). Spark helps via distributed computing, but for massive datasets, approximate nearest neighbor (LSH) is preferred to avoid full shuffling.')
 
 pdf.chapter_title(12, 'Author Influence Network')
 pdf.chapter_body('Implemented in spark/q12_influence.py.')
+pdf.add_screenshot("Q12 Output Screenshot", "outputs/q12_influence.png")
 pdf.chapter_body('Influence Definition: Author A -> Author B if A released a book within X=5 years before B.')
 pdf.chapter_body('Representation: DataFrame of edges (author_a, author_b).')
 pdf.chapter_body('Pros: Easy SQL aggregations. Cons: Expensive cross-joins.')
