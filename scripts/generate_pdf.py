@@ -70,7 +70,7 @@ pdf.add_page()
 pdf.set_font('Arial', 'B', 12)
 pdf.cell(0, 10, 'GitHub Repository:', 0, 1)
 pdf.set_font('Arial', '', 11)
-pdf.write(5, 'https://github.com/chiragphor/CSL7110_Assignment1\n(Please verify this link points to your actual repo)')
+pdf.write(5, 'https://github.com/cph0r/CSL7110_Assignment1')
 pdf.ln(10)
 
 # Section: Apache Hadoop & MapReduce
