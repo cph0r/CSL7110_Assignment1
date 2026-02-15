@@ -1,0 +1,32 @@
+# Data files
+data/
+*.txt
+!README.md
+
+# Java build artifacts
+hadoop/*.class
+hadoop/*.jar
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+
+# Spark
+spark-warehouse/
+metastore_db/
+derby.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Output files (include selectively)
+outputs/*.txt
