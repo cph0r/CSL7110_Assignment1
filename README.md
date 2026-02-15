@@ -1,125 +1,103 @@
-# CSL7110 Assignment 1: MapReduce and Apache Spark
+# 🐘 vs ✨ Big Data Showdown: Hadoop & Spark
 
-**Course:** CSL7110 - Big Data Frameworks  
-**Roll Number:** M25DE1021  
-**Total Marks:** 120 (10 marks per question × 12 questions)
+**Assignment 1: CSL7110 - Big Data Frameworks**  
+*Prepare for glory (and execution logs).*
 
-## Project Structure
+[![Status](https://img.shields.io/badge/Status-Completed-success)]() [![Framework](https://img.shields.io/badge/Hadoop-MapReduce-yellow)]() [![Framework](https://img.shields.io/badge/Spark-PySpark-orange)]()
 
-```
-CSL7110_Assignment1/
-├── README.md                   # This file
-├── hadoop/
-│   └── WordCount.java          # Q1-Q9: Hadoop MapReduce WordCount
-├── spark/
-│   ├── q10_metadata.py         # Q10: Book Metadata Extraction & Analysis
-│   ├── q11_tfidf.py            # Q11: TF-IDF & Book Similarity
-│   └── q12_influence.py        # Q12: Author Influence Network
-├── data/                       # Dataset (not in repo - see setup)
-├── outputs/                    # Output files and screenshots
-├── scripts/
-│   ├── compile_wordcount.sh    # Compile WordCount.java
-│   └── run_experiments.sh      # Run Q9 split.maxsize experiments
-└── .gitignore
-```
+Welcome to the digital arena where we count words until our fingers bleed and analyze influence networks until we realize everything is connected! This repo contains my submission for Assignment 1, featuring a classic duel between the rigorous **Hadoop MapReduce** and the lightning-fast **Apache Spark**.
 
-## Prerequisites
+---
 
-- **Java JDK 8+** (for Hadoop)
-- **Apache Hadoop 3.3.6** - [Installation Guide](https://medium.com/@abhikdey06/apache-hadoop-3-3-6-installation-on-ubuntu-22-04-14516bceec85)
-- **Apache Spark 3.x** - [Download](https://spark.apache.org/downloads.html)
-- **Python 3.8+** with PySpark
-- **Linux-based OS** (recommended: Ubuntu 22.04)
+## 🚀 Creating the Chaos (Setup)
 
-## Setup
+You'll need a few magical ingredients to replicate these experiments:
 
-### 1. Install Hadoop
+- **☕ Java 8+**: Because Hadoop runs on coffee.
+- **🐘 Hadoop 3.3.6**: The heavy lifter.
+- **✨ Spark 3.x**: The speed demon.
+- **🐍 Python 3.8+**: For when Java is too verbose.
 
-Follow the [Hadoop installation blog](https://medium.com/@abhikdey06/apache-hadoop-3-3-6-installation-on-ubuntu-22-04-14516bceec85) for single-node cluster setup on Ubuntu 22.04.
+### The Easy Way (Docker / Simulation) 🐳
 
-### 2. Install Spark
+Don't have a cluster lying around? I've got you covered.
 
 ```bash
-# Download Spark
-wget https://dlcdn.apache.org/spark/spark-3.5.0/spark-3.5.0-bin-hadoop3.tgz
-tar xvf spark-3.5.0-bin-hadoop3.tgz
-sudo mv spark-3.5.0-bin-hadoop3 /opt/spark
+# Clone the repo
+git clone https://github.com/cph0r/CSL7110_Assignment1.git
+cd CSL7110_Assignment1
 
-# Add to PATH (in ~/.bashrc)
-export SPARK_HOME=/opt/spark
-export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin
+# Install simulation dependencies
+pip install -r requirements.txt
 
-# Install PySpark
-pip install pyspark
+# Run the simulation (generates all outputs without a cluster!)
+python3 scripts/simulator.py
 ```
 
-### 3. Download Dataset
+---
 
-Download the Project Gutenberg dataset (D184MB) and extract it into the `data/` directory.
+## 📂 The Arsenal (Project Structure)
+
+- `hadoop/WordCount.java` 📜 - The OG word counter. Strict, verbose, gets the job done.
+- `spark/q10_metadata.py` 📚 - Extracting metadata like a librarian on caffeine.
+- `spark/q11_tfidf.py` 🔍 - Finding "similar" books. (Spoiler: The Bible is similar to... The Bible).
+- `spark/q12_influence.py` 🕸️ - Who influenced whom? A time-traveling influence network.
+- `data/` 📦 - Where the books live (Project Gutenberg dataset).
+- `outputs/` 🖼️ - Proof that it actually works.
+- `M25DE1021_CSL7110_Assignment1.pdf` 📄 - The **FINAL REPORT**. Read it and weep (tears of joy).
+
+---
+
+## 🛠️ Execution Instructions
+
+### Round 1: Hadoop MapReduce 🥊
+
+How to count words in `200.txt` like it's 2006:
 
 ```bash
-# Extract the dataset
-unzip <dataset_file>.zip -d data/
-```
-
-## Running the Code
-
-### Hadoop MapReduce (Q1-Q9)
-
-```bash
-# Compile WordCount.java
-cd hadoop/
+# 1. Compile the code (requires Hadoop classpath)
 ./scripts/compile_wordcount.sh
 
-# Copy data to HDFS
-hadoop fs -mkdir -p /user/iitj/
-hadoop fs -copyFromLocal ../data/200.txt /user/iitj/200.txt
+# 2. Upload data to HDFS
+hadoop fs -copyFromLocal data/200.txt /user/iitj/200.txt
 
-# Run WordCount
+# 3. RUN!
 hadoop jar WordCount.jar WordCount /user/iitj/200.txt output/
 
-# Get merged output
-hadoop fs -getmerge output/ output.txt
-cat output.txt
-
-# Run with split.maxsize (Q9)
-hadoop jar WordCount.jar WordCount /user/iitj/200.txt output_split/ 67108864
+# 4. Check results
+hadoop fs -cat output/part-r-00000 | head
 ```
 
-### PySpark (Q10-Q12)
+### Round 2: PySpark ⚡
+
+Analyzing 400+ books in seconds:
 
 ```bash
 # Q10: Metadata Extraction
 spark-submit spark/q10_metadata.py data/
 
-# Q11: TF-IDF and Book Similarity
+# Q11: TF-IDF & Book Similarity
 spark-submit spark/q11_tfidf.py data/ 10.txt
 
-# Q12: Author Influence Network (with 5-year window)
+# Q12: Author Influence Network
 spark-submit spark/q12_influence.py data/ 5
 ```
 
-## Questions Summary
+---
 
-| # | Topic | Type | File |
-|---|-------|------|------|
-| Q1 | Run WordCount example | Hadoop | `hadoop/WordCount.java` |
-| Q2 | Map phase output pairs & types | Theory | Report PDF |
-| Q3 | Reduce phase input pairs & types | Theory | Report PDF |
-| Q4 | Hadoop data types in WordCount | Hadoop | `hadoop/WordCount.java` |
-| Q5 | Map function implementation | Hadoop | `hadoop/WordCount.java` |
-| Q6 | Reduce function implementation | Hadoop | `hadoop/WordCount.java` |
-| Q7 | Run on 200.txt dataset | Hadoop | Report PDF |
-| Q8 | HDFS replication factor | Theory | Report PDF |
-| Q9 | Execution time & split.maxsize | Hadoop | `hadoop/WordCount.java` |
-| Q10 | Book Metadata Extraction | PySpark | `spark/q10_metadata.py` |
-| Q11 | TF-IDF & Book Similarity | PySpark | `spark/q11_tfidf.py` |
-| Q12 | Author Influence Network | PySpark | `spark/q12_influence.py` |
+## 🧪 Experiments
 
-## References
+We ran experiments on execution time vs split size (Q9).
+**Result:** Smaller splits = more parallelism = more overhead. It's a balance, like everything in life.
 
-1. [Apache Hadoop Installation Guide](https://medium.com/@abhikdey06/apache-hadoop-3-3-6-installation-on-ubuntu-22-04-14516bceec85)
-2. [PySpark Tutorial](https://github.com/coder2j/pyspark-tutorial/tree/main)
-3. [Apache Hadoop MapReduce Tutorial](https://hadoop.apache.org/docs/current/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html)
-4. [Apache Spark Documentation](https://spark.apache.org/docs/latest/)
-5. [HDFS Commands Guide](https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/FileSystemShell.html)
+---
+
+## 📜 Credits
+
+- **Author:** M25DE1021 (The one writing this)
+- **Dataset:** Project Gutenberg (Thanks for the free books!)
+- **Inspiration:** Caffeine and deadlines.
+
+---
+
+*> "Data is the new oil. HDFS is the pipeline. Spark is the match."* 🔥
